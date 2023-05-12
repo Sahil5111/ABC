@@ -20,9 +20,15 @@ function App() {
   }
 
   function HandleSubmit() {
-    fetch(`http://localhost:3000/random?Source=${Data.Source}&Destination=${Data.Destination}`)
+    console.log("As I was unable to find any reliable flight APIs, I am making a call to an RNG API.");
+    fetch(`https://abc-sahil5111.vercel.app/random?Source=${Data.Source}&Destination=${Data.Destination}`)
       .then(response => response.json())
       .then(response => setFare(response.Fare))
+      .catch(error => {
+        console.log(error)
+        setFare('Invalid response')
+      }
+      )
   }
 
   return (
@@ -46,7 +52,7 @@ function App() {
         />
         <button onClick={HandleSubmit}>Fetch Minimum Fare</button>
       </div>
-      {Fare !== '' && <div>Minimum Fare is: {Fare}₹</div>}
+      {Fare === 'Invalid response' ?  <div>Unable to fetch results</div>: Fare !== '' && <div>Minimum Fare is: ₹{Fare}</div>}
     </>
   )
 }
